@@ -10,4 +10,9 @@ class Member extends Model
     use HasFactory;
 
     protected $fillable = ['first_name', 'last_name', 'job'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
