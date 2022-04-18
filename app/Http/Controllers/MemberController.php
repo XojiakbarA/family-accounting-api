@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MemberRequest;
+use App\Http\Requests\Member\StoreRequest;
+use App\Http\Requests\Member\UpdateRequest;
 use App\Http\Resources\MemberResource;
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -26,7 +28,7 @@ class MemberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MemberRequest $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->validated();
 
@@ -53,9 +55,13 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, Member $member)
     {
-        //
+        $data = $request->validated();
+
+        $member->update($data);
+
+        return new MemberResource($member);
     }
 
     /**
@@ -64,8 +70,12 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Member $member)
     {
-        //
+        $deleted = $member->delete();
+
+        if ($deleted) :
+            return response(null, 204);
+        endif;
     }
 }
