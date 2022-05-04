@@ -14,9 +14,9 @@ class FinanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $finances = Finance::all();
+        $finances = $request->user()->finances;
 
         return FinanceResource::collection($finances);
     }
